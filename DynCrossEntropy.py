@@ -32,13 +32,13 @@ def dyn_weighted_bincrossentropy(true, pred):
     one_weight = keras.backend.sum(keras.backend.cast(pred < 0.5, true.dtype)) / num_pred +  keras.backend.epsilon()
 
     # calculate the weight vector
-    weight_vector =  (1.0 - true) * zero_weight +  true * one_weight 
+    weights =  (1.0 - true) * zero_weight +  true * one_weight 
     
     # calculate the binary cross entropy
     bin_crossentropy = keras.backend.binary_crossentropy(true, pred)
     
     # apply the weights
-    weighted_bin_crossentropy = weight_vector * bin_crossentropy 
+    weighted_bin_crossentropy = weights * bin_crossentropy 
 
     return keras.backend.mean(weighted_bin_crossentropy)
 
@@ -61,7 +61,7 @@ def weighted_bincrossentropy(true, pred, weight_zero = 0.25, weight_one = 1):
     bin_crossentropy = keras.backend.binary_crossentropy(true, pred)
     
     # apply the weights
-    weight_vector = true * weight_one + (1. - true) * weight_zero
-    weighted_bin_crossentropy = weight_vector * bin_crossentropy 
+    weights = true * weight_one + (1. - true) * weight_zero
+    weighted_bin_crossentropy = weights * bin_crossentropy 
 
     return keras.backend.mean(weighted_bin_crossentropy)
