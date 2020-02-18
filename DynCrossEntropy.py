@@ -41,3 +41,27 @@ def dyn_weighted_bincrossentropy(true, pred):
     weighted_bin_crossentropy = weight_vector * bin_crossentropy 
 
     return keras.backend.mean(weighted_bin_crossentropy)
+
+
+def weighted_bincrossentropy(true, pred, weight_zero = 0.25, weight_one = 1):
+    """
+    Calculates weighted binary cross entropy. The weights are fixed.
+        
+    This can be useful for unbalanced catagories.
+    
+    Adjust the weights here depending on what is required.
+    
+    For example if there are 10x as many positive classes as negative classes,
+        if you adjust weight_zero = 1.0, weight_one = 0.1, then false positives 
+        will be penalize 10 times as much as false negatives.
+
+    """
+  
+    # calculate the binary cross entropy
+    bin_crossentropy = keras.backend.binary_crossentropy(true, pred)
+    
+    # apply the weights
+    weight_vector = true * weight_one + (1. - true) * weight_zero
+    weighted_bin_crossentropy = weight_vector * bin_crossentropy 
+
+    return keras.backend.mean(weighted_bin_crossentropy)
